@@ -41,7 +41,6 @@ const btnCopiar = document.getElementById('btn-copiar');
 const boxOntem = document.getElementById('box-ontem');
 const nomeOntemEl = document.getElementById('nome-ontem');
 
-// Elementos do Modal de Ajuda
 const btnAjuda = document.getElementById('btn-ajuda');
 const modalAjuda = document.getElementById('modal-ajuda');
 const btnFecharModal = document.getElementById('btn-fechar-modal');
@@ -59,7 +58,6 @@ async function iniciarSistema() {
 
 iniciarSistema();
 
-// Lógica de abertura e fechamento suave do Modal de Ajuda
 btnAjuda.addEventListener('click', () => {
     modalAjuda.classList.remove('escondido');
     setTimeout(() => {
@@ -85,29 +83,37 @@ modalAjuda.addEventListener('click', (e) => {
 
 function obterChaveDataHoje() {
     const hoje = new Date();
-    return `${hoje.getFullYear()}-${hoje.getMonth() + 1}-${hoje.getDate()}`;
+    return `${hoje.getUTCFullYear()}-${hoje.getUTCMonth() + 1}-${hoje.getUTCDate()}`;
+}
+
+function obterIndiceDoDia() {
+    const hoje = new Date();
+    const stringData = `${hoje.getUTCFullYear()}-${hoje.getUTCMonth() + 1}-${hoje.getUTCDate()}`;
+    
+    let hash = 0;
+    for (let i = 0; i < stringData.length; i++) {
+        hash = (hash << 5) - hash + stringData.charCodeAt(i);
+        hash |= 0; 
+    }
+    return Math.abs(hash) % personagens.length;
 }
 
 function selecionarPersonagemDoModo(modo) {
     if (modo === 'classico') {
         const dataHoje = obterChaveDataHoje();
         const salvoData = localStorage.getItem('comicguess_data_secreto');
-        const salvoIndice = localStorage.getItem('comicguess_indice_secreto');
 
-        if (salvoData === dataHoje && salvoIndice !== null && personagens[salvoIndice]) {
-            const idx = parseInt(salvoIndice);
-            personagemSecreto = personagens[idx];
-            let indiceOntem = (idx - 1 + personagens.length) % personagens.length;
-            personagemOntem = personagens[indiceOntem];
-        } else if (personagens.length > 0) {
-            const indiceSorteado = Math.floor(Math.random() * personagens.length);
-            personagemSecreto = personagens[indiceSorteado];
+        if (salvoData !== dataHoje) {
             localStorage.setItem('comicguess_data_secreto', dataHoje);
-            localStorage.setItem('comicguess_indice_secreto', indiceSorteado);
             localStorage.removeItem('comicguess_chutes_' + dataHoje);
             localStorage.removeItem('comicguess_venceu_' + dataHoje);
+        }
 
-            let indiceOntem = (indiceSorteado - 1 + personagens.length) % personagens.length;
+        if (personagens.length > 0) {
+            const indiceDoDia = obterIndiceDoDia();
+            personagemSecreto = personagens[indiceDoDia];
+
+            let indiceOntem = (indiceDoDia - 1 + personagens.length) % personagens.length;
             personagemOntem = personagens[indiceOntem];
         }
         numeroDoDia = 1;
@@ -192,7 +198,6 @@ function iniciarJogo(modo) {
         areaJogo.classList.remove('escondido');
         areaJogo.classList.add('animar-entrada');
 
-        // Verifica se já venceu o desafio diário para descer a tela suavemente após abrir
         const dataHoje = obterChaveDataHoje();
         const venceuSalvo = localStorage.getItem('comicguess_venceu_' + dataHoje) === 'true';
         if (modoAtual === 'classico' && venceuSalvo) {
@@ -435,7 +440,7 @@ function processarChute() {
 
     if (!jogoJaComecou) {
         containerTabela.classList.remove('escondido');
-        indicadoresContainer.classList.remove('escondido');
+        indicadoresContainer.classList.add('escondido');
         jogoJaComecou = true;
     }
 
@@ -567,7 +572,7 @@ function mostrarVitoria(carregamentoRapido) {
 function iniciarCronometro() {
     setInterval(() => {
         const agora = new Date();
-        const amanha = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() + 1);
+        const amanha = new Date(agora.getUTCFullYear(), agora.getUTCMonth(), agora.getUTCDate() + 1);
         const diferenca = amanha - agora;
 
         const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
