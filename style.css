@@ -1,11 +1,9 @@
 html {
     overflow-y: scroll;
-    /* Estilização da barra de rolagem global para navegadores compatíveis (Firefox) */
     scrollbar-width: thin;
     scrollbar-color: #f39c12 #16161b;
 }
 
-/* Estilização da barra de rolagem global para Chrome, Edge e Safari */
 html::-webkit-scrollbar {
     width: 8px;
 }
@@ -122,7 +120,6 @@ body {
     box-shadow: 2px 2px 0px #000000;
 }
 
-/* CLASSE PARA TORNAR OS BOTÕES INVISÍVEIS COM POP DE SAÍDA E ENTRADA */
 .btn-ajuda-externo.invisivel,
 .btn-home-externo.invisivel {
     transform: scale(0) !important;
@@ -293,7 +290,7 @@ body {
     transform: scale(1.1);
 }
 
-/* TELA INICIAL (PAINEL DE QUADRINHOS) E ANIMAÇÃO DE RETORNO */
+/* TELA INICIAL */
 @keyframes entrarHome {
     0% {
         opacity: 0;
@@ -457,7 +454,7 @@ body {
     margin-top: 2px;
 }
 
-/* BANNER DO MODO INFINITO ESTILO HQ */
+/* BANNER MODO INFINITO */
 .banner-infinito-estilo {
     width: 100%;
     max-width: 650px;
@@ -493,7 +490,6 @@ body {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
-/* BOTÃO JOGAR NOVAMENTE / ESTILIZADOS */
 .btn-jogar-novamente-estilo {
     margin-top: 15px;
     padding: 12px 25px;
@@ -521,7 +517,6 @@ body {
     box-shadow: 1px 1px 0px #000000;
 }
 
-/* BOTÕES NA TELA DE VITÓRIA DO CLÁSSICO (LADO A LADO) */
 .vitoria-botoes-container {
     display: flex;
     gap: 15px;
@@ -560,7 +555,6 @@ body {
     box-shadow: 1px 1px 0px #000000;
 }
 
-/* ANIMAÇÕES DE TRANSIÇÃO SUAVE PARA O JOGO */
 @keyframes entrarJogo {
     0% {
         opacity: 0;
@@ -592,7 +586,7 @@ body {
     pointer-events: none;
 }
 
-/* ÁREA DE BUSCA E ANIMAÇÕES SUAVES DA LISTA */
+/* ÁREA DE BUSCA */
 .busca-container {
     display: flex;
     justify-content: center;
@@ -709,13 +703,11 @@ body {
     animation: descerLista 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ESTILO DO ITEM SELECIONADO VIA TECLADO */
 #lista-sugestoes li.sugestao-selecionada {
     background-color: rgba(243, 156, 18, 0.35);
     color: white;
 }
 
-/* PERSONALIZAÇÃO DA BARRA DE ROLAGEM (SCROLLBAR) */
 #lista-sugestoes::-webkit-scrollbar {
     width: 8px;
 }
@@ -792,7 +784,7 @@ body {
     box-shadow: 1px 1px 0px #000000;
 }
 
-/* TABELA CENTRALIZADA E ALINHADA */
+/* TABELA */
 .tabela-container {
     width: 100%;
     overflow-x: auto;
@@ -1197,4 +1189,162 @@ td {
     color: #f39c12; 
     font-weight: 900;
     text-transform: uppercase;
+}
+
+/* --- RESPONSIVIDADE PARA CELULARES E TELAS PEQUENAS --- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        padding-bottom: 40px;
+    }
+
+    .container {
+        padding: 0 5px;
+    }
+
+    .logo-area-externa {
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    .btn-home-externo, .btn-ajuda-externo {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    .logo-container {
+        padding: 8px 15px;
+        max-width: calc(100% - 120px);
+    }
+
+    .logo-titulo {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+
+    .subtitulo-topo {
+        font-size: 1.1rem;
+    }
+
+    #tela-inicial {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .comic-panel-home {
+        padding: 20px 15px;
+    }
+
+    .comic-stamp {
+        font-size: 1rem;
+        padding: 4px 15px;
+    }
+
+    .btn-modo-principal {
+        padding: 15px;
+    }
+
+    .btn-modo-principal .icone-modo {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
+        margin-right: 12px;
+    }
+
+    .btn-modo-principal .titulo-modo {
+        font-size: 1.6rem;
+    }
+
+    .btn-modo-principal .subtitulo-modo {
+        font-size: 0.85rem;
+    }
+
+    .busca-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .input-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #input-personagem {
+        font-size: 0.95rem;
+        padding: 12px 15px;
+    }
+
+    #btn-chutar {
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 12px;
+    }
+
+    .tabela-container {
+        padding: 5px 0;
+        justify-content: flex-start;
+    }
+
+    table {
+        min-width: 820px;
+        border-spacing: 4px 10px;
+    }
+
+    th {
+        font-size: 0.85rem;
+        padding: 8px 2px;
+        width: 82px;
+    }
+
+    th:first-child, td:first-child {
+        width: 80px;
+    }
+
+    td {
+        height: 80px;
+    }
+
+    .celula-interna {
+        font-size: 0.65rem;
+        padding: 2px 4px;
+    }
+
+    .nome-overlay {
+        font-size: 0.9rem;
+    }
+
+    .modal-conteudo-hq {
+        padding: 25px 20px;
+        width: 95%;
+    }
+
+    .modal-conteudo-hq h2 {
+        font-size: 2rem;
+    }
+
+    #box-vitoria, #box-compartilhar, #box-ontem {
+        max-width: 100%;
+        padding: 20px 15px;
+        margin: 15px 10px;
+    }
+
+    .vitoria-conteudo h2 {
+        font-size: 2.2rem;
+    }
+
+    #nome-vitoria {
+        font-size: 2rem;
+    }
+
+    .vitoria-botoes-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-estilizado-vitoria {
+        width: 100%;
+    }
 }
