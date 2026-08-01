@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComicGuess - Adivinhe o Personagem</title>
+    <!-- Importando fontes do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <!-- CABEÇALHO UNIFICADO COM BLOCO ÚNICO E SIMÉTRICO -->
+        <header class="header-jogo">
+            <div class="logo-area-externa">
+                <button id="btn-home-externo" class="btn-home-externo invisivel" title="Voltar para a tela inicial">🏠</button>
+                <div id="logo-home" class="logo-container logo-clicavel" title="Voltar para a tela inicial">
+                    <h1 class="logo-titulo">ComicGuess</h1>
+                </div>
+                <button id="btn-ajuda" class="btn-ajuda-externo invisivel" title="Como Jogar / Regras">?</button>
+            </div>
+            <div class="header-sub-container">
+                <p class="subtitulo-topo">Qual é o personagem secreto de hoje?</p>
+            </div>
+        </header>
+
+        <!-- TELA INICIAL (PAINEL DE QUADRINHOS COM OS DOIS MODOS) -->
+        <div id="tela-inicial">
+            <div class="comic-panel-home">
+                <div class="comic-stamp">SELECIONE O MODO</div>
+                
+                <button id="btn-iniciar" class="btn-modo-principal">
+                    <span class="icone-modo">⚡</span>
+                    <div class="texto-modo">
+                        <span class="titulo-modo">DESAFIO DIÁRIO</span>
+                        <span class="subtitulo-modo">Desvende a identidade secreta diária</span>
+                    </div>
+                </button>
+
+                <button id="btn-infinito" class="btn-modo-principal btn-infinito-estilo">
+                    <span class="icone-modo">♾️</span>
+                    <div class="texto-modo">
+                        <span class="titulo-modo">MODO INFINITO</span>
+                        <span class="subtitulo-modo">Partidas sem fim para pura diversão</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ÁREA DO JOGO -->
+        <div id="area-jogo" class="escondido">
+            
+            <!-- BANNER DE AVISO DO MODO INFINITO -->
+            <div id="banner-modo-infinito" class="escondido banner-infinito-estilo">
+                <div class="banner-conteudo-hq">
+                    <span class="banner-titulo-hq">MODO INFINITO ATIVADO</span>
+                    <p class="banner-texto-hq">Partidas sem fim, sem pausas e focadas na pura diversão! Jogue quantas vezes quiser.</p>
+                </div>
+            </div>
+
+            <div id="area-busca" class="busca-container">
+                <div class="input-wrapper">
+                    <input type="text" id="input-personagem" placeholder="Digite o nome de um personagem..." autocomplete="off">
+                    <ul id="lista-sugestoes" class="escondido"></ul>
+                </div>
+                <button id="btn-chutar">CHUTAR</button>
+            </div>
+
+            <!-- Tabela de Palpites -->
+            <div id="container-tabela" class="tabela-container escondido">
+                <table id="tabela-palpites">
+                    <thead id="cabecalho-tabela">
+                        <tr>
+                            <th>Personagem</th>
+                            <th>Gênero</th>
+                            <th>Alinhamento</th>
+                            <th>Universo</th>
+                            <th>Espécie</th>
+                            <th>Origem</th>
+                            <th>Habilidade</th>
+                            <th>Equipe</th>
+                            <th>Ano</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela">
+                        <!-- As linhas vão aparecer aqui -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- INDICADORES DE COR (LEGENDA) -->
+            <div id="indicadores-container" class="escondido">
+                <div class="indicadores-caixa">
+                    <div class="indicador-topo">
+                        <span>Legenda de Pistas</span>
+                    </div>
+                    <div class="indicadores-itens">
+                        <div class="item-ind">
+                            <div class="quadradinho cor-correto"></div>
+                            <span>Correto</span>
+                        </div>
+                        <div class="item-ind">
+                            <div class="quadradinho cor-parcial"></div>
+                            <span>Parcial</span>
+                        </div>
+                        <div class="item-ind">
+                            <div class="quadradinho cor-errado"></div>
+                            <span>Incorreto</span>
+                        </div>
+                        <div class="item-ind">
+                            <div class="quadradinho cor-errado seta-cima-mini"></div>
+                            <span>Mais alto</span>
+                        </div>
+                        <div class="item-ind">
+                            <div class="quadradinho cor-errado seta-baixo-mini"></div>
+                            <span>Mais baixo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TELAS DE VITÓRIA, COMPARTILHAMENTO E ONTEM -->
+            <div id="box-vitoria" class="escondido">
+                <div class="vitoria-conteudo">
+                    <h2>IDENTIDADE REVELADA!</h2>
+                    <p class="txt-acertou">Você desvendou o mistério. O personagem é:</p>
+                    <img id="img-vitoria" src="" alt="Foto do Personagem">
+                    <h3 id="nome-vitoria">Nome do Personagem</h3>
+                    <p id="resumo-vitoria">O resumo da história vai aparecer aqui...</p>
+                    
+                    <div id="bloco-cronometro" class="container-cronometro">
+                        <p>Próximo arquivo em:</p>
+                        <div id="cronometro">--:--:--</div>
+                        
+                        <!-- BOTÕES EXTRAS NA TELA DE VITÓRIA DO DESAFIO DIÁRIO -->
+                        <div id="vitoria-botoes-classico" class="vitoria-botoes-container escondido">
+                            <button id="btn-voltar-inicio-vitoria" class="btn-estilizado-vitoria">VOLTAR AO INÍCIO</button>
+                            <button id="btn-ir-infinito-vitoria" class="btn-estilizado-vitoria btn-infinito-cor">MODO INFINITO</button>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-jogar-novamente-infinito" class="escondido btn-jogar-novamente-estilo">JOGAR NOVAMENTE</button>
+                </div>
+            </div>
+
+            <div id="box-compartilhar" class="escondido">
+                <h4 class="titulo-sessao">RELATÓRIO DA MISSÃO</h4>
+                <p id="texto-compartilhar"></p>
+                <div id="grid-emojis"></div>
+                <button id="btn-copiar">📋 COPIAR RESULTADO</button>
+            </div>
+
+            <div id="box-ontem" class="escondido">
+                <div class="icone-ontem">⏪</div>
+                <div class="texto-ontem-container">
+                    <p class="label-ontem">ARQUIVO CONFIDENCIAL ANTERIOR</p>
+                    <p class="desc-ontem">O personagem de ontem era <span id="nome-ontem"></span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL DE INSTRUÇÕES / AJUDA -->
+    <div id="modal-ajuda" class="escondido modal-overlay">
+        <div class="modal-conteudo-hq">
+            <button id="btn-fechar-modal" class="modal-fechar">X</button>
+            <h2>COMO JOGAR</h2>
+            <p><strong>🎯 Desafio Diário:</strong> Todo dia, um novo personagem secreto é selecionado. Todos os jogadores tentam adivinhar exatamente o mesmo personagem!</p>
+            <p><strong>💡 Dicas de Cores:</strong> A cada palpite, a tabela revela pistas. O <span style="color:#2ecc71; font-weight:700;">Verde</span> indica acerto total, o <span style="color:#f39c12; font-weight:700;">Laranja</span> indica acerto parcial (características compartilhadas) e o <span style="color:#e74c3c; font-weight:700;">Vermelho</span> indica incorreto.</p>
+            <div class="modal-destaque">
+                🚀 <strong>Em breve:</strong> Sistema completo de pontuação, cadastro de usuários e ranking global para você competir e provar que é o maior fã de quadrinhos!
+            </div>
+            <button id="btn-entender-modal" class="btn-jogar-novamente-estilo" style="margin-top: 20px; width: 100%;">ENTENDI, VAMO JOGAR!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
