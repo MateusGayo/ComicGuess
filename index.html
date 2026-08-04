@@ -4,20 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ComicGuess - Adivinhe o Personagem</title>
+    <!-- Favicon na aba do navegador -->
+    <link rel="icon" type="image/png" href="imagens/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- CAMADA DE FUNDO FIXA BLINDADA COM ACELERAÇÃO DE GPU -->
+    <div class="fundo-fixo">
+        <img src="https://images.unsplash.com/photo-1588497859490-85d1c17db96d?q=80&w=2560&auto=format&fit=crop" alt="Fundo HQ">
+    </div>
+
     <div class="container">
         
         <header class="header-jogo">
             <div class="logo-area-externa">
                 <button id="btn-home-externo" class="btn-home-externo invisivel" title="Voltar para a tela inicial">🏠</button>
-                <div id="logo-home" class="logo-container logo-clicavel" title="Voltar para a tela inicial">
-                    <h1 class="logo-titulo">ComicGuess</h1>
-                </div>
+                <img src="imagens/logo-ajustada.png" alt="ComicGuess Logo" id="logo-home" class="logo-imagem-solta logo-clicavel" title="Voltar para a tela inicial">
                 <button id="btn-ajuda" class="btn-ajuda-externo invisivel" title="Como Jogar / Regras">?</button>
             </div>
             <div class="header-sub-container">
@@ -26,32 +31,19 @@
         </header>
 
         <div id="tela-inicial">
-            <div class="comic-panel-home">
-                <div class="comic-stamp">SELECIONE O MODO</div>
-                
-                <button id="btn-iniciar" class="btn-modo-principal">
-                    <span class="icone-modo">⚡</span>
-                    <div class="texto-modo">
-                        <span class="titulo-modo">DESAFIO DIÁRIO</span>
-                        <span class="subtitulo-modo">Desvende a identidade secreta diária</span>
-                    </div>
-                </button>
-
-                <button id="btn-infinito" class="btn-modo-principal btn-infinito-estilo">
-                    <span class="icone-modo">♾️</span>
-                    <div class="texto-modo">
-                        <span class="titulo-modo">MODO INFINITO</span>
-                        <span class="subtitulo-modo">Partidas sem fim para pura diversão</span>
-                    </div>
-                </button>
+            <div class="comic-stamp" style="margin-bottom: 25px;">SELECIONE O MODO</div>
+            
+            <div class="botoes-modo-container">
+                <img src="imagens/botao_diario.png" alt="Desafio Diário" id="btn-iniciar" class="btn-modo-imagem">
+                <img src="imagens/botao_livre.png" alt="Modo Livre" id="btn-livre" class="btn-modo-imagem">
             </div>
         </div>
 
         <div id="area-jogo" class="escondido">
             
-            <div id="banner-modo-infinito" class="escondido banner-infinito-estilo">
+            <div id="banner-modo-livre" class="escondido banner-livre-estilo">
                 <div class="banner-conteudo-hq">
-                    <span class="banner-titulo-hq">MODO INFINITO ATIVADO</span>
+                    <span class="banner-titulo-hq">MODO LIVRE ATIVADO</span>
                     <p class="banner-texto-hq">Partidas sem fim, sem pausas e focadas na pura diversão! Jogue quantas vezes quiser.</p>
                 </div>
             </div>
@@ -71,10 +63,10 @@
                             <th>Personagem</th>
                             <th>Gênero</th>
                             <th>Alinhamento</th>
-                            <th>Universo</th>
+                            <th>Editora</th>
                             <th>Espécie</th>
                             <th>Origem</th>
-                            <th>Habilidade</th>
+                            <th>Habilidades</th>
                             <th>Equipe</th>
                             <th>Ano</th>
                         </tr>
@@ -83,32 +75,18 @@
                     </tbody>
                 </table>
             </div>
+
             <div id="indicadores-container" class="escondido">
                 <div class="indicadores-caixa">
                     <div class="indicador-topo">
                         <span>Legenda de Pistas</span>
                     </div>
                     <div class="indicadores-itens">
-                        <div class="item-ind">
-                            <div class="quadradinho cor-correto"></div>
-                            <span>Correto</span>
-                        </div>
-                        <div class="item-ind">
-                            <div class="quadradinho cor-parcial"></div>
-                            <span>Parcial</span>
-                        </div>
-                        <div class="item-ind">
-                            <div class="quadradinho cor-errado"></div>
-                            <span>Incorreto</span>
-                        </div>
-                        <div class="item-ind">
-                            <div class="quadradinho cor-errado seta-cima-mini"></div>
-                            <span>Mais alto</span>
-                        </div>
-                        <div class="item-ind">
-                            <div class="quadradinho cor-errado seta-baixo-mini"></div>
-                            <span>Mais baixo</span>
-                        </div>
+                        <div class="item-ind"><div class="quadradinho cor-correto"></div><span>Correto</span></div>
+                        <div class="item-ind"><div class="quadradinho cor-parcial"></div><span>Parcial</span></div>
+                        <div class="item-ind"><div class="quadradinho cor-errado"></div><span>Incorreto</span></div>
+                        <div class="item-ind"><div class="quadradinho cor-errado seta-cima-mini"></div><span>Mais alto</span></div>
+                        <div class="item-ind"><div class="quadradinho cor-errado seta-baixo-mini"></div><span>Mais baixo</span></div>
                     </div>
                 </div>
             </div>
@@ -127,11 +105,11 @@
                         
                         <div id="vitoria-botoes-classico" class="vitoria-botoes-container escondido">
                             <button id="btn-voltar-inicio-vitoria" class="btn-estilizado-vitoria">VOLTAR AO INÍCIO</button>
-                            <button id="btn-ir-infinito-vitoria" class="btn-estilizado-vitoria btn-infinito-cor">MODO INFINITO</button>
+                            <button id="btn-ir-livre-vitoria" class="btn-estilizado-vitoria btn-livre-cor">MODO LIVRE</button>
                         </div>
                     </div>
                     
-                    <button id="btn-jogar-novamente-infinito" class="escondido btn-jogar-novamente-estilo">JOGAR NOVAMENTE</button>
+                    <button id="btn-jogar-novamente-livre" class="escondido btn-jogar-novamente-estilo">JOGAR NOVAMENTE</button>
                 </div>
             </div>
 

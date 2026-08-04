@@ -13,10 +13,10 @@ let filtradosAtuais = [];
 const telaInicial = document.getElementById('tela-inicial');
 const areaJogo = document.getElementById('area-jogo');
 const btnIniciar = document.getElementById('btn-iniciar');
-const btnInfinito = document.getElementById('btn-infinito');
+const btnLivre = document.getElementById('btn-livre');
 const logoHome = document.getElementById('logo-home');
 const btnHomeExterno = document.getElementById('btn-home-externo');
-const bannerModoInfinito = document.getElementById('banner-modo-infinito');
+const bannerModoLivre = document.getElementById('banner-modo-livre');
 const areaBusca = document.getElementById('area-busca');
 const inputPersonagem = document.getElementById('input-personagem');
 const listaSugestoes = document.getElementById('lista-sugestoes');
@@ -31,8 +31,8 @@ const resumoVitoria = document.getElementById('resumo-vitoria');
 const blocoCronometro = document.getElementById('bloco-cronometro');
 const vitoriaBotoesClassico = document.getElementById('vitoria-botoes-classico');
 const btnVoltarInicioVitoria = document.getElementById('btn-voltar-inicio-vitoria');
-const btnIrInfinitoVitoria = document.getElementById('btn-ir-infinito-vitoria');
-const btnJogarNovamenteInfinito = document.getElementById('btn-jogar-novamente-infinito');
+const btnIrLivreVitoria = document.getElementById('btn-ir-livre-vitoria');
+const btnJogarNovamenteLivre = document.getElementById('btn-jogar-novamente-livre');
 const cronometroEl = document.getElementById('cronometro'); 
 const boxCompartilhar = document.getElementById('box-compartilhar');
 const textoCompartilhar = document.getElementById('texto-compartilhar');
@@ -153,17 +153,17 @@ function iniciarJogo(modo) {
 
     btnHomeExterno.classList.remove('invisivel');
 
-    if (modoAtual === 'infinito') {
+    if (modoAtual === 'livre') {
         blocoCronometro.classList.add('escondido');
         vitoriaBotoesClassico.classList.add('escondido');
-        btnJogarNovamenteInfinito.classList.remove('escondido');
-        bannerModoInfinito.classList.remove('escondido');
+        btnJogarNovamenteLivre.classList.remove('escondido');
+        bannerModoLivre.classList.remove('escondido');
         btnAjuda.classList.add('invisivel'); 
     } else {
         blocoCronometro.classList.remove('escondido');
         vitoriaBotoesClassico.classList.remove('escondido');
-        btnJogarNovamenteInfinito.classList.add('escondido');
-        bannerModoInfinito.classList.add('escondido');
+        btnJogarNovamenteLivre.classList.add('escondido');
+        bannerModoLivre.classList.add('escondido');
         btnAjuda.classList.remove('invisivel'); 
 
         const dataHoje = obterChaveDataHoje();
@@ -209,19 +209,19 @@ function iniciarJogo(modo) {
 }
 
 btnIniciar.addEventListener('click', () => iniciarJogo('classico'));
-btnInfinito.addEventListener('click', () => iniciarJogo('infinito'));
+btnLivre.addEventListener('click', () => iniciarJogo('livre'));
 
-function reiniciarInfinitoSuave() {
+function reiniciarLivreSuave() {
     areaJogo.classList.add('saindo-jogo-suave');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
     setTimeout(() => {
         areaJogo.classList.remove('saindo-jogo-suave');
-        iniciarJogo('infinito');
+        iniciarJogo('livre');
     }, 350);
 }
 
-btnJogarNovamenteInfinito.addEventListener('click', reiniciarInfinitoSuave);
+btnJogarNovamenteLivre.addEventListener('click', reiniciarLivreSuave);
 
 function voltarParaInicio() {
     areaJogo.classList.add('escondido');
@@ -240,7 +240,7 @@ function voltarParaInicio() {
     btnChutar.disabled = false;
     areaBusca.classList.remove('recolher-busca');
     areaBusca.classList.remove('escondido');
-    bannerModoInfinito.classList.add('escondido');
+    bannerModoLivre.classList.add('escondido');
     
     btnHomeExterno.classList.add('invisivel');
     btnAjuda.classList.add('invisivel');
@@ -263,10 +263,10 @@ logoHome.addEventListener('click', voltarParaInicio);
 btnHomeExterno.addEventListener('click', voltarParaInicio);
 btnVoltarInicioVitoria.addEventListener('click', voltarParaInicio);
 
-btnIrInfinitoVitoria.addEventListener('click', () => {
+btnIrLivreVitoria.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setTimeout(() => {
-        iniciarJogo('infinito');
+        iniciarJogo('livre');
     }, 300);
 });
 
@@ -396,12 +396,24 @@ function dispararAnimacaoEnvio() {
 }
 
 function compararCampo(chuteVal, secretoVal) {
-    if (chuteVal === secretoVal) return 'correto';
+    if (!chuteVal || !secretoVal) return 'errado';
     
-    const itensChute = chuteVal.toLowerCase().split(/,|\s+e\s+/).map(s => s.trim()).filter(Boolean);
-    const itensSecreto = secretoVal.toLowerCase().split(/,|\s+e\s+/).map(s => s.trim()).filter(Boolean);
-    
-    const temIntersecao = itensChute.some(item => itensSecreto.includes(item));
+    const limparString = (str) => {
+        return normalizarTexto(str)
+            .split(',')
+            .map(s => s.replace(/\s+/g, ' ').trim())
+            .filter(Boolean);
+    };
+
+    const itensChute = limparString(chuteVal);
+    const itensSecreto = limparString(secretoVal);
+
+    if (chuteVal.trim().toLowerCase() === secretoVal.trim().toLowerCase()) return 'correto';
+
+    const temIntersecao = itensChute.some(itemChute => 
+        itensSecreto.some(itemSecreto => itemSecreto === itemChute)
+    );
+
     if (temIntersecao) return 'parcial';
     
     return 'errado';
@@ -440,7 +452,7 @@ function processarChute() {
 
     if (!jogoJaComecou) {
         containerTabela.classList.remove('escondido');
-        indicadoresContainer.classList.add('escondido');
+        indicadoresContainer.classList.remove('escondido'); 
         jogoJaComecou = true;
     }
 
@@ -474,11 +486,11 @@ function adicionarLinhaTabela(chute, carregamentoRapido) {
     const classesCores = [
         '', 
         chute.genero === personagemSecreto.genero ? 'correto' : 'errado',
-        chute.alinhamento === personagemSecreto.alinhamento ? 'correto' : 'errado',
-        chute.universo === personagemSecreto.universo ? 'correto' : 'errado',
-        chute.especie === personagemSecreto.especie ? 'correto' : 'errado',
-        chute.origem === personagemSecreto.origem ? 'correto' : 'errado',
-        compararCampo(chute.habilidade, personagemSecreto.habilidade),
+        compararCampo(chute.alinhamento, personagemSecreto.alinhamento),
+        chute.editora === personagemSecreto.editora ? 'correto' : 'errado',
+        compararCampo(chute.especie, personagemSecreto.especie),
+        compararCampo(chute.origem, personagemSecreto.origem),
+        compararCampo(chute.habilidades, personagemSecreto.habilidades),
         compararCampo(chute.equipe, personagemSecreto.equipe),
         classeAno.includes('correto') ? 'correto' : 'errado' 
     ];
@@ -490,10 +502,10 @@ function adicionarLinhaTabela(chute, carregamentoRapido) {
         </div>`,
         `<div class="celula-interna">${chute.genero}</div>`,
         `<div class="celula-interna">${chute.alinhamento}</div>`,
-        `<div class="celula-interna">${chute.universo}</div>`,
+        `<div class="celula-interna">${chute.editora}</div>`,
         `<div class="celula-interna">${chute.especie}</div>`,
         `<div class="celula-interna">${chute.origem}</div>`,
-        `<div class="celula-interna">${chute.habilidade}</div>`,
+        `<div class="celula-interna">${chute.habilidades}</div>`,
         `<div class="celula-interna">${chute.equipe}</div>`,
         `<div class="celula-interna">${htmlAno}</div>`
     ];
@@ -526,13 +538,20 @@ function compararAno(anoChutado, anoSecreto) {
 
 function gerarLinhaEmoji(chute) {
     const emjGenero = chute.genero === personagemSecreto.genero ? '🟩' : '🟥';
-    const emjAlinhamento = chute.alinhamento === personagemSecreto.alinhamento ? '🟩' : '🟥';
-    const emjUniverso = chute.universo === personagemSecreto.universo ? '🟩' : '🟥';
-    const emjEspecie = chute.especie === personagemSecreto.especie ? '🟩' : '🟥';
-    const emjOrigem = chute.origem === personagemSecreto.origem ? '🟩' : '🟥';
     
-    const resHabilidade = compararCampo(chute.habilidade, personagemSecreto.habilidade);
-    const emjHabilidade = resHabilidade === 'correto' ? '🟩' : (resHabilidade === 'parcial' ? '🟨' : '🟥');
+    const resAlinhamento = compararCampo(chute.alinhamento, personagemSecreto.alinhamento);
+    const emjAlinhamento = resAlinhamento === 'correto' ? '🟩' : (resAlinhamento === 'parcial' ? '🟨' : '🟥');
+
+    const emjEditora = chute.editora === personagemSecreto.editora ? '🟩' : '🟥';
+    
+    const resEspecie = compararCampo(chute.especie, personagemSecreto.especie);
+    const emjEspecie = resEspecie === 'correto' ? '🟩' : (resEspecie === 'parcial' ? '🟨' : '🟥');
+
+    const resOrigem = compararCampo(chute.origem, personagemSecreto.origem);
+    const emjOrigem = resOrigem === 'correto' ? '🟩' : (resOrigem === 'parcial' ? '🟨' : '🟥');
+    
+    const resHabilidades = compararCampo(chute.habilidades, personagemSecreto.habilidades);
+    const emjHabilidades = resHabilidades === 'correto' ? '🟩' : (resHabilidades === 'parcial' ? '🟨' : '🟥');
 
     const resEquipe = compararCampo(chute.equipe, personagemSecreto.equipe);
     const emjEquipe = resEquipe === 'correto' ? '🟩' : (resEquipe === 'parcial' ? '🟨' : '🟥');
@@ -541,7 +560,7 @@ function gerarLinhaEmoji(chute) {
     if (chute.ano_estreia < personagemSecreto.ano_estreia) emjAno = '⬆️';
     else if (chute.ano_estreia > personagemSecreto.ano_estreia) emjAno = '⬇️';
 
-    historicoEmojis.push(`${emjGenero}${emjAlinhamento}${emjUniverso}${emjEspecie}${emjOrigem}${emjHabilidade}${emjEquipe}${emjAno}`);
+    historicoEmojis.push(`${emjGenero}${emjAlinhamento}${emjEditora}${emjEspecie}${emjOrigem}${emjHabilidades}${emjEquipe}${emjAno}`);
 }
 
 function mostrarVitoria(carregamentoRapido) {
